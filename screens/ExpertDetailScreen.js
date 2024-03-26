@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,70 +8,95 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons"; // Assuming you have Ionicons installed
+import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 
-const ExpertDetailScreen = () => {
+const ExpertDetailScreen = ({ route }) => {
   const navigation = useNavigation();
+  const { expertId } = route.params;
+  const [expert, setExpert] = useState(null);
+  const [rating, setRating] = useState(null);
 
-  const handleConnect = () => {
-    // Add your connect logic here
-    navigation.navigate("ExpertDetail");
+  useEffect(() => {
+    const fetchExpertData = async () => {
+      try {
+        const response = await axios.get(
+          `http://192.168.255.57/api/users/experts/${expertId}`
+        );
+        setExpert(response.data);
+      } catch (error) {
+        console.log("Error fetching expert data:", error.message);
+      }
+    };
+    fetchExpertData();
+  }, [expertId]);
+
+  const handleRateExpert = async (newRating) => {
+    try {
+      await axios.post(
+        `http://192.168.255.57:5000/api/users/experts/rate/${expertId}`,
+        { rating: newRating }
+      );
+      // Update the local state with the new rating
+      setRating(newRating);
+    } catch (error) {
+      console.log("Error rating expert:", error.message);
+    }
   };
 
-  return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: "white",
-        paddingTop: Platform.OS === "android" ? 30 : 0,
-        paddingHorizontal: 10,
-      }}>
-      {/* Image at the top */}
-      <Image style={styles.image} source={require("../assets/profile.jpg")} />
+  const handleConnect = () => {
+    navigation.navigate("Messages", {
+      headerTitle: expert.user.username,
+      chatUserId: expert.user._id,
+      profilePic: expert.user.profilePic,
+    });
+  };
 
-      {/* Name */}
-      <Text style={styles.name}>John Doe</Text>
-
-      {/* Rating (example: 4 stars) */}
-      <View style={styles.ratingContainer}>
-        {[1, 2, 3, 4].map((star, index) => (
-          <Ionicons key={index} name="star" size={20} color="#FFD700" />
-        ))}
-
-        {/* Add text next to the rating stars */}
-        <Text style={styles.ratingText}>4.2 from 200 people</Text>
+  if (!expert) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>Loading...</Text>
       </View>
+    );
+  }
 
-      {/* Description */}
-      <Text style={styles.description}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget
-        felis ut velit gravida ullamcorper.
-      </Text>
-
-      {/* Followed by section */}
+  return (
+    <SafeAreaView style={styles.container}>
+      <Image style={styles.image} source={{ uri: expert.user.profilePic }} />
+      <Text style={styles.name}>{expert.user.username}</Text>
+      <View style={styles.ratingContainer}>
+        {[...Array(5)].map((_, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => handleRateExpert(index + 1)}>
+            <Ionicons
+              name="star"
+              size={20}
+              color={index < rating ? "#FFD700" : "#C0C0C0"}
+            />
+          </TouchableOpacity>
+        ))}
+        <Text style={styles.ratingText}>
+          {expert.rating.toFixed(1)} from {expert.votesCount} people
+        </Text>
+      </View>
+      <Text style={styles.description}>{expert.description}</Text>
       <View style={styles.followedByContainer}>
         <Text style={styles.followedByText}>Followed by</Text>
         <View style={styles.circularImagesContainer}>
-          {/* Display three circular images */}
-          <Image
-            style={styles.circularImage}
-            source={require("../assets/logo.png")}
-          />
-          <Image
-            style={styles.circularImage}
-            source={require("../assets/logo.png")}
-          />
-          <Image
-            style={styles.circularImage}
-            source={require("../assets/logo.png")}
-          />
-          {/* Display ... for additional images */}
-          <Text style={styles.ellipsis}>... and others.</Text>
+          {expert.user.followers.slice(0, 3).map((follower, index) => (
+            <Image
+              key={index}
+              style={styles.circularImage}
+              source={{ uri: follower.profilePic }}
+            />
+          ))}
+          {expert.user.followers.length > 3 && (
+            <Text style={styles.ellipsis}> ... and others.</Text>
+          )}
         </View>
       </View>
-
-      {/* Connect button at the bottom */}
       <TouchableOpacity onPress={handleConnect} style={styles.connectButton}>
         <Text style={styles.connectButtonText}>Connect</Text>
       </TouchableOpacity>
@@ -79,14 +104,27 @@ const ExpertDetailScreen = () => {
   );
 };
 
-export default ExpertDetailScreen;
-
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+    paddingTop: Platform.OS === "android" ? 30 : 0,
+    paddingHorizontal: 10,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   image: {
     width: "100%",
     height: 200,
-    resizeMode: "contain",
+    resizeMode: "cover",
     borderRadius: 10,
+    marginBottom: 10,
+  },
+  description: {
+    fontSize: 16,
     marginBottom: 10,
   },
   name: {
@@ -100,7 +138,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 20,
-    marginTop: 20,
   },
   ratingText: {
     marginLeft: 5,
@@ -110,6 +147,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     marginBottom: 10,
+    textAlign: "justify",
   },
   connectButton: {
     backgroundColor: "#008E97",
@@ -133,7 +171,7 @@ const styles = StyleSheet.create({
   },
   circularImagesContainer: {
     flexDirection: "row",
-    alignItems: "center", // Center the text vertically
+    alignItems: "center",
   },
   circularImage: {
     width: 30,
@@ -147,3 +185,5 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
 });
+
+export default ExpertDetailScreen;

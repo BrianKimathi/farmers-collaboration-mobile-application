@@ -3,11 +3,14 @@ import { StyleSheet, Text, View } from "react-native";
 import StackNavigator from "./navigation/StackNavigator";
 import { UserContext } from "./UserContext";
 import { ModalPortal } from "react-native-modals";
+import { SocketContextProvider } from "./SocketContext";
 
 export default function App() {
   return (
     <UserContext>
-      <StackNavigator />
+      <SocketContextProvider>
+        <StackNavigator />
+      </SocketContextProvider>
       <ModalPortal />
     </UserContext>
   );

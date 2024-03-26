@@ -1,16 +1,36 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
-const Message = ({ message }) => {
+const Message = ({ message, alignRight }) => {
   return (
-    <View style={{ flexDirection: "row", padding: 10 }}>
-      <View style={{ flex: 1 }}>
-        <Text>{message.sender}</Text>
-        <Text>{message.text}</Text>
-      </View>
-      <Text>{message.timestamp}</Text>
+    <View
+      style={[
+        styles.messageContainer,
+        alignRight ? styles.alignRight : styles.alignLeft,
+      ]}>
+      <Text>{message.message}</Text>
     </View>
   );
 };
 
+const styles = StyleSheet.create({
+  messageContainer: {
+    padding: 10,
+    marginVertical: 5,
+    maxWidth: "70%",
+    borderRadius: 8,
+    margin: 6,
+    marginBottom: 4,
+  },
+  alignRight: {
+    alignSelf: "flex-end",
+    backgroundColor: "#DCF8C5", // Example background color for messages aligned to the right
+  },
+  alignLeft: {
+    alignSelf: "flex-start",
+    backgroundColor: "#E5E5EA", // Example background color for messages aligned to the left
+  },
+});
+
 export default Message;
+``;

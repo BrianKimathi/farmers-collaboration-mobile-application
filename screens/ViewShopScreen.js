@@ -24,7 +24,7 @@ const ViewShopScreen = () => {
   const fetchProducts = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.0.107:5000/api/products/${businessId}`
+        `http://192.168.255.57:5000/api/products/${businessId}`
       );
       console.log(response.data);
       setProducts(response.data);

@@ -96,7 +96,7 @@ const UploadVideoScreen = () => {
         console.log("Video URL:", reelUrl);
         // Send the video URL to the backend
         const response = await axios.post(
-          "http://192.168.0.107:5000/api/reels",
+          "http://192.168.255.57:5000/api/reels",
           { video: reelUrl },
           {
             headers: {

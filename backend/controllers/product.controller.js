@@ -10,16 +10,47 @@ export const getProducts = async (req, res) => {
   }
 };
 
-// // Get product by id
-// export const getProductById = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const product = await Product.findById(id);
-//     res.status(200).json(product);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
+// Get product by id
+export const getProductById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findById(id)
+      .populate({
+        path: "business",
+        select: "name owner",
+        populate: {
+          path: "owner",
+          select: "_id username profilePic", // Include username and profilePic fields
+        },
+      })
+      .select("name price images description"); // Include description field
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const response = {
+      _id: product._id,
+      name: product.name,
+      price: product.price,
+      images: product.images,
+      description: product.description,
+      business: {
+        _id: product.business._id,
+        name: product.business.name,
+        owner: {
+          username: product.business.owner.username,
+          profilePic: product.business.owner.profilePic,
+          id: product.business.owner._id,
+        },
+      },
+    };
+
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 // // Get products by business
 export const getProductsByBusiness = async (req, res) => {

@@ -1,22 +1,45 @@
-import React from "react";
-import { View, FlatList, TextInput, Button } from "react-native";
+import React, { useState, useContext, useRef, useEffect } from "react";
+import { View, FlatList } from "react-native";
 import Message from "./Message";
+import MessageInput from "./MessageInput";
+import { UserType } from "../UserContext";
+import axios from "axios";
 
-const ChatRoom = ({ messages, sendMessage }) => {
+const ChatRoom = ({ messages, receiverId, setMessages }) => {
+  const { userId } = useContext(UserType);
+  const flatListRef = useRef();
+
+  useEffect(() => {
+    // Scroll to the bottom when messages change
+    flatListRef.current.scrollToEnd({ animated: true });
+  }, [messages]);
+
+  const sendMessage = async (message) => {
+    try {
+      const res = await axios.post(
+        `http://192.168.0.107:5000/api/messages/send/${receiverId}`,
+        { message }
+      );
+      setMessages([...messages, res.data]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <FlatList
+        ref={flatListRef}
         data={messages}
-        renderItem={({ item }) => <Message message={item} />}
-        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <Message message={item} alignRight={item.senderId === userId} />
+        )}
+        keyExtractor={(item) => item._id.toString()}
+        onContentSizeChange={() =>
+          flatListRef.current.scrollToEnd({ animated: true })
+        }
       />
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <TextInput
-          placeholder="Type your message..."
-          style={{ flex: 1, borderWidth: 1, padding: 10 }}
-        />
-        <Button title="Send" onPress={sendMessage} />
-      </View>
+      <MessageInput onSend={sendMessage} />
     </View>
   );
 };

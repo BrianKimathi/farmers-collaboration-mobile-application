@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   Alert,
+  Pressable,
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -19,12 +20,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserType } from "../UserContext";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 const HomeScreen = () => {
   const [username, setUsername] = useState("");
   const [profilePic, setProfilePic] = useState("");
 
-  const { setUserId, hasBusiness, setHasBusiness, setBusinessId } = useContext(UserType);
+  const { setUserId, hasBusiness, setHasBusiness, setBusinessId, userId } =
+    useContext(UserType);
 
   const navigation = useNavigation();
 
@@ -41,6 +44,14 @@ const HomeScreen = () => {
   };
   const handleExpertPress = () => {
     navigation.navigate("Expert");
+  };
+
+  const handleConnect = () => {
+    navigation.navigate("SocialContent");
+  };
+
+  const viewUsers = () => {
+    navigation.navigate("ViewUsers");
   };
 
   const getUserData = async () => {
@@ -70,19 +81,19 @@ const HomeScreen = () => {
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.userId;
         setUserId(userId);
-
         // Fetch business data
         const businessResponse = await axios.get(
-          `http://192.168.0.107:5000/api/business/${userId}`
+          `http://192.168.255.57:5000/api/business/${userId}`
         );
 
         // Check if the response data contains business information
         const businessData = businessResponse.data.businessData;
-        setBusinessId(businessData._id);
-        AsyncStorage.setItem("businessId", businessData._id);
-
         if (businessData) {
+          setBusinessId(businessData._id);
+          AsyncStorage.setItem("businessId", businessData._id);
           setHasBusiness(true);
+        } else {
+          setHasBusiness(false);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -249,31 +260,54 @@ const HomeScreen = () => {
               marginTop: 14,
               fontWeight: "bold",
             }}>
-            Get Connected Now.
+            Manage Social Content
           </Text>
           <View
             style={{
+              width: "100%",
               flexDirection: "row",
               justifyContent: "space-between",
-              flexWrap: "wrap",
+              paddingHorizontal: 10,
+              borderWidth: 1,
+              paddingVertical: 10,
+              borderRadius: 10,
+              marginTop: 10,
+              borderColor: "#008E97",
             }}>
-            <Connect />
-            <Connect />
-            <Connect />
-            <Connect />
-            <TouchableOpacity
+            <Image
               style={{
-                width: "100%",
-                paddingVertical: 10,
-                backgroundColor: "#008E97",
-                borderRadius: 8,
+                width: 120,
+                height: 120,
+                resizeMode: "contain",
+                borderRadius: 50,
+              }}
+              source={require("../assets/social.png")}
+            />
+            <View
+              style={{
+                height: 100,
+                justifyContent: "space-between",
+                padding: 10,
               }}>
-              <Text
-                style={{ textAlign: "center", color: "#fff", fontSize: 16 }}>
-                View More Users
+              <Text style={{ color: "#008E97", fontSize: 18 }}>
+                Manage Social Content
               </Text>
-            </TouchableOpacity>
+              <Pressable
+                onPress={handleConnect}
+                style={{
+                  backgroundColor: "#008E97",
+                  paddingVertical: 10,
+                  borderRadius: 10,
+                  textAlign: "center",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-evenly",
+                }}>
+                <Text style={{ color: "#fff", fontSize: 18 }}>Connect</Text>
+              </Pressable>
+            </View>
           </View>
+
           <Text
             style={{
               color: "#008E97",
@@ -281,30 +315,47 @@ const HomeScreen = () => {
               marginTop: 14,
               fontWeight: "bold",
             }}>
-            Discover Shops
+            Discover Users
           </Text>
           <View
             style={{
+              width: "100%",
               flexDirection: "row",
               justifyContent: "space-between",
-              flexWrap: "wrap",
+              paddingHorizontal: 20,
+              borderWidth: 1,
+              paddingVertical: 10,
+              borderRadius: 10,
+              marginTop: 10,
+              borderColor: "#008E97",
             }}>
-            <Shop />
-            <Shop />
-            <Shop />
-            <Shop />
-            <TouchableOpacity
+            <Image
               style={{
-                width: "100%",
-                paddingVertical: 10,
-                backgroundColor: "#008E97",
-                borderRadius: 8,
-              }}>
-              <Text
-                style={{ textAlign: "center", color: "#fff", fontSize: 16 }}>
-                Discover More Shops
+                width: 120,
+                height: 120,
+                resizeMode: "contain",
+                borderRadius: 50,
+              }}
+              source={require("../assets/users.png")}
+            />
+            <View style={{ height: 100, justifyContent: "space-evenly" }}>
+              <Text style={{ color: "#008E97", fontSize: 18 }}>
+                Discover other users
               </Text>
-            </TouchableOpacity>
+              <Pressable
+                onPress={viewUsers}
+                style={{
+                  backgroundColor: "#008E97",
+                  paddingVertical: 10,
+                  borderRadius: 10,
+                  textAlign: "center",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-evenly",
+                }}>
+                <Text style={{ color: "#fff", fontSize: 18 }}>Connect</Text>
+              </Pressable>
+            </View>
           </View>
         </View>
       </ScrollView>

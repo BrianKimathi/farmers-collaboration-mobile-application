@@ -53,7 +53,7 @@ const CreateShopScreen = () => {
       // Create business
       try {
         const response = await axios.post(
-          "http://192.168.0.107:5000/api/business",
+          "http://192.168.255.57:5000/api/business",
           business
         );
 

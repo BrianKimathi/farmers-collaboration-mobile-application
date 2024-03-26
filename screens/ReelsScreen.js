@@ -50,7 +50,7 @@ const ReelsScreen = () => {
 
       // Send the request to add the comment to the backend
       await axios.post(
-        `http://192.168.0.107:5000/api/reels/comment/${reelId}`,
+        `http://192.168.255.57:5000/api/reels/comment/${reelId}`,
         {
           comment: newComment.trim(),
         }
@@ -78,7 +78,7 @@ const ReelsScreen = () => {
 
   useEffect(() => {
     axios
-      .get("http://192.168.0.107:5000/api/reels")
+      .get("http://192.168.255.57:5000/api/reels")
       .then((response) => {
         setReels(response.data);
       })
@@ -95,7 +95,7 @@ const ReelsScreen = () => {
     React.useCallback(() => {
       const unsubscribe = navigation.addListener("focus", () => {
         axios
-          .get("http://192.168.0.107:5000/api/reels")
+          .get("http://192.168.255.57:5000/api/reels")
           .then((response) => {
             setReels(response.data);
           })
@@ -230,7 +230,7 @@ const ReelsScreen = () => {
               <ScrollView
                 vertical
                 showsVerticalScrollIndicator
-                style={{ flex: 1, marginTop: 8 }}>
+                style={{ marginTop: 8 }}>
                 {item.comments.map((comment) => (
                   <Text
                     style={{
@@ -256,6 +256,7 @@ const ReelsScreen = () => {
                   flexDirection: "row",
                   justifyContent: "space-evenly",
                   alignItems: "center",
+                  flex: 1,
                 }}>
                 <TextInput
                   placeholder="Comment..."
@@ -311,7 +312,7 @@ const ReelsScreen = () => {
         setReels(updatedReels);
 
         // Send the request to the backend
-        await axios.post(`http://192.168.0.107:5000/api/reels/like/${reelId}`);
+        await axios.post(`http://192.168.255.57:5000/api/reels/like/${reelId}`);
       }
     } catch (error) {
       console.error(error);
@@ -339,7 +340,7 @@ const ReelsScreen = () => {
 
         // Send the request to the backend
         await axios.post(
-          `http://192.168.0.107:5000/api/reels/dislike/${reelId}`
+          `http://192.168.255.57:5000/api/reels/dislike/${reelId}`
         );
       }
     } catch (error) {
@@ -366,7 +367,7 @@ const ReelsScreen = () => {
 
       // Update the state with the modified reels data
       setReels(updatedReels);
-      await axios.post(`http://192.168.0.107:5000/api/auth/follow/${userId}`);
+      await axios.post(`http://192.168.255.57:5000/api/auth/follow/${userId}`);
 
       // Update the isFollowing state globally
       setIsFollowing(true);
@@ -404,6 +405,10 @@ const ReelsScreen = () => {
       };
     }, [])
   );
+
+  const handleConnectWithUsers = async () => {
+    navigation.navigate("ViewUsers");
+  };
 
   return (
     <>

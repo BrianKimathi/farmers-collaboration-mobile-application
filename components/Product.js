@@ -5,15 +5,14 @@ import { useNavigation } from "@react-navigation/native";
 const Product = ({ product }) => {
   const navigation = useNavigation();
 
-  const handleViewProduct = () => {
-    // Add your logic for viewing the product
-    // You can navigate to the product details screen or perform any other action
+  const handleViewProduct = (id) => {
+    navigation.navigate("ProductDetail", { productId: product._id });
   };
 
   return (
     <View style={styles.cardContainer}>
       {/* Product Image */}
-      <Image style={styles.image} source={{ uri: product.images[1] }} />
+      <Image style={styles.image} source={{ uri: product.images[0] }} />
       {/* Product Details */}
       <View style={styles.textContainer}>
         {/* Product Title */}

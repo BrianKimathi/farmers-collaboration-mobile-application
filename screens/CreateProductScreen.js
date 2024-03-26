@@ -111,11 +111,11 @@ const CreateProductScreen = () => {
       Alert.alert("Please fill in all fields");
       return;
     }
-  
+
     try {
       const productUrls = await uploadMedia();
       setImagesUrls(productUrls);
-  
+
       const productData = {
         name: productName,
         price: productPrice,
@@ -123,11 +123,11 @@ const CreateProductScreen = () => {
         business: businessId,
         images: productUrls, // Update to use productUrls instead of imagesUrls
       };
-  
+
       console.log("Product Data:", productData);
-  
+
       const response = await axios.post(
-        "http://192.168.0.107:5000/api/products",
+        "http://192.168.255.57:5000/api/products",
         productData,
         {
           headers: {
@@ -135,7 +135,7 @@ const CreateProductScreen = () => {
           },
         }
       );
-  
+
       console.log(response.data);
       navigation.replace("ViewShop");
     } catch (error) {
@@ -157,7 +157,6 @@ const CreateProductScreen = () => {
       console.error("Error config:", error.config);
     }
   };
-  
 
   return (
     <SafeAreaView style={styles.container}>

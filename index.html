@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image API Request</title>
+  </head>
+  <body>
+    <h1>Image API Request</h1>
+    <div>
+      <label for="imageInput">Select an image:</label>
+      <input type="file" id="imageInput" accept="image/*" />
+      <button id="sendButton">Send Image</button>
+    </div>
+
+    <h1>Disease Information</h1>
+    <div id="resultContainer">
+      <!-- Data will be displayed here -->
+    </div>
+
+    <script>
+      document
+        .getElementById("sendButton")
+        .addEventListener("click", async () => {
+          const inputFile = document.getElementById("imageInput").files[0];
+          if (!inputFile) {
+            alert("Please select an image file.");
+            return;
+          }
+
+          // Convert selected image to base64
+          const base64String = await toBase64(inputFile);
+
+          // Send base64 string to the API
+          const url = "https://susya.onrender.com";
+          const response = await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ image: base64String }),
+          });
+
+          // Handle API response
+          const responseData = await response.text();
+          document.getElementById("resultContainer").innerHTML = responseData;
+        });
+
+      // Function to convert file to base64
+      function toBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => resolve(reader.result.split(",")[1]);
+          reader.onerror = (error) => reject(error);
+        });
+      }
+    </script>
+  </body>
+</html>

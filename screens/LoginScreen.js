@@ -44,7 +44,7 @@ const LoginScreen = () => {
     };
 
     axios
-      .post("http://192.168.0.107:5000/api/auth/login", user)
+      .post("http://192.168.255.57:5000/api/auth/login", user)
       .then((response) => {
         const token = response.headers["set-cookie"][0]
           .split("=")[1]

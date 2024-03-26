@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import Expert from "../models/expert.model.js";
 import bcrypt from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
 
@@ -30,7 +31,7 @@ export const signup = async (req, res) => {
     });
 
     if (newUser) {
-      await generateTokenAndSetCookie(newUser._id, res);
+      generateTokenAndSetCookie(newUser._id, res);
       await newUser.save();
     }
 
@@ -112,5 +113,112 @@ export const followUser = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });
+  }
+};
+
+// Route to get current user's info
+export const getMyInfo = async (req, res) => {
+  try {
+    // Get current user's ID from request object
+    const userId = req.user._id;
+
+    // Find the user by ID and exclude the password field
+    const user = await User.findById(userId).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Return the user's information
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const updateUser = async (req, res) => {
+  try {
+    const userId = req.user._id; // Get current user's ID
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Extract new user data from request body
+    const { username, email, newPassword, profilePic } = req.body;
+
+    console.log(
+      `Username is: ${username}, Email is: ${email}, Password is: ${newPassword}, ProfilePic is: ${profilePic}`
+    );
+
+    // Update user's username if provided
+    if (username) {
+      user.username = username;
+    }
+
+    // Update user's email if provided
+    if (email) {
+      user.email = email;
+    }
+
+    // Update user's password if provided
+    if (newPassword) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(newPassword, salt);
+      user.password = hashedPassword;
+    }
+
+    // Update user's profile picture if provided
+    if (profilePic) {
+      user.profilePic = profilePic;
+    }
+
+    // Save the updated user
+    await user.save();
+
+    // Return the updated user
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// create expert
+export const createExpert = async (req, res) => {
+  try {
+    const currentUser = req.user._id;
+    const description = req.body.description;
+
+    console.log("Description is: ", description);
+
+    // Check if the current user is already an expert
+    const existingExpert = await Expert.findOne({ user: currentUser });
+
+    if (existingExpert) {
+      return res.status(400).json({ error: "User is already an expert" });
+    }
+
+    // Create a new expert instance
+    const newExpert = new Expert({
+      user: currentUser,
+      description: description,
+    });
+
+    // Save the new expert to the database
+    await newExpert.save();
+
+    // Update the current user's isExpert field to true
+    await User.findByIdAndUpdate(currentUser, { isExpert: true });
+
+    // Respond with the newly created expert
+    res.status(201).json(newExpert);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };

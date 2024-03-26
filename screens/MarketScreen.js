@@ -23,7 +23,7 @@ const MarketScreen = () => {
   const fetchProducts = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.0.107:5000/api/products`
+        `http://192.168.255.57:5000/api/products`
       );
       console.log(response.data);
       setProducts(response.data);

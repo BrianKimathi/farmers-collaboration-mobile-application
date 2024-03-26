@@ -7,7 +7,16 @@ const expertSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    description: {
+      type: String,
+      required: true,
+      default: "",
+    },
     rating: {
+      type: Number,
+      default: 0,
+    },
+    votesCount: {
       type: Number,
       default: 0,
     },

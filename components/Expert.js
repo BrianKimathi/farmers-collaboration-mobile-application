@@ -1,25 +1,30 @@
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons"; // Assuming you have Ionicons installed
+import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-const Expert = () => {
+const Expert = ({ expert }) => {
   const navigation = useNavigation();
-
   const handleConnect = () => {
-    // Add your connect logic here
-    navigation.navigate("ExpertDetail");
+    navigation.navigate("ExpertDetail", {
+      expertId: expert?._id,
+    });
   };
 
   return (
     <View style={styles.cardContainer}>
       <Image style={styles.image} source={require("../assets/logo.png")} />
       <View style={styles.textContainer}>
-        <Text style={styles.name}>Kelly Smith</Text>
+        <Text style={styles.name}>{expert.user.username}</Text>
         <View style={styles.ratingContainer}>
-          {/* Display stars based on rating (example: 4 stars) */}
-          {[1, 2, 3, 4].map((star, index) => (
-            <Ionicons key={index} name="star" size={20} color="#FFD700" />
+          {/* Display stars based on rating */}
+          {[...Array(5)].map((_, index) => (
+            <Ionicons
+              key={index}
+              name="star"
+              size={20}
+              color={index < expert.rating ? "#FFD700" : "#C0C0C0"}
+            />
           ))}
         </View>
         <TouchableOpacity onPress={handleConnect} style={styles.connectButton}>
@@ -29,8 +34,6 @@ const Expert = () => {
     </View>
   );
 };
-
-export default Expert;
 
 const styles = StyleSheet.create({
   cardContainer: {
@@ -76,3 +79,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 });
+
+export default Expert;

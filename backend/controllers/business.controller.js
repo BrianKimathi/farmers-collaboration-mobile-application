@@ -23,6 +23,8 @@ export const getBusinessByOwner = async (req, res) => {
   }
 };
 
+
+
 export const createBusiness = async (req, res) => {
   const { owner, name, description } = req.body;
   const logo = "https://img.icons8.com/?size=50&id=63370&format=png";

@@ -12,16 +12,19 @@ const reelSchema = new mongoose.Schema(
       required: true,
     },
     likes: {
-      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Array of Object IDs of User type
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
       default: [],
     },
     dislikes: {
-      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Array of Object IDs of User type
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
       default: [],
     },
     comments: {
       type: [String],
       default: [],
+    },
+    title: {
+      type: String, // Assuming the title is a string
     },
   },
   { timestamps: true }

@@ -1,4 +1,3 @@
-import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -10,7 +9,6 @@ import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import MarketScreen from "../screens/MarketScreen";
 import ChatScreen from "../screens/ChatScreen";
-import NotificationsScreen from "../screens/NotificationsScreen";
 import AccountScreen from "../screens/AccountScreen";
 import ScanScreen from "../screens/ScanScreen";
 import ExpertsScreen from "../screens/ExpertsScreen";
@@ -21,6 +19,14 @@ import ViewShopScreen from "../screens/ViewShopScreen";
 import CreateProductScreen from "../screens/CreateProductScreen";
 import ReelsScreen from "../screens/ReelsScreen";
 import MessageScreen from "../screens/MessageScreen";
+import CallScreen from "../screens/CallScreen";
+import ProductDetailScreen from "../screens/ProductDetailScreen";
+import EditProfileScreen from "../screens/EditProfileScreen";
+import SocialScreen from "../screens/SocialScreen";
+import RegisterExpertScreen from "../screens/RegisterExpertScreen";
+import SocialContentScreen from "../screens/SocialContentScreen";
+import ViewUsersScreen from "../screens/ViewUsersScreen";
+import AiChatScreen from "../screens/AiChatScreen";
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -79,11 +85,12 @@ const StackNavigator = () => {
 
         <Tab.Screen
           name="Chats"
-          component={MessageScreen}
+          component={ChatScreen}
           options={{
-            tabBarLabel: "Chats",
+            tabBarLabel: "Your chats",
+
             tabBarLabelStyle: { color: "#008E97" },
-            headerShown: false,
+            headerShown: true,
             tabBarIcon: ({ focused }) =>
               focused ? (
                 <Ionicons name="chatbox" size={24} color="#008E97" />
@@ -126,6 +133,27 @@ const StackNavigator = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="SocialContent"
+          component={SocialContentScreen}
+          options={{
+            headerTitle: "Your Reels", // Set your desired header title
+            headerStyle: {
+              backgroundColor: "#008E97", // Set your desired background color
+            },
+            headerTintColor: "#fff", // Set the text color of the header title
+          }}
+        />
+        <Stack.Screen
+          name="ViewUsers"
+          component={ViewUsersScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Call"
+          component={CallScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="Scan"
           component={ScanScreen}
           options={{
@@ -148,7 +176,6 @@ const StackNavigator = () => {
             headerTintColor: "#fff", // Set the text color of the header title
           }}
         />
-
         <Stack.Screen
           name="CreateShop"
           component={CreateShopScreen}
@@ -160,7 +187,6 @@ const StackNavigator = () => {
             headerTintColor: "#fff", // Set the text color of the header title
           }}
         />
-
         <Stack.Screen
           name="ExpertDetail"
           component={ExpertDetailScreen}
@@ -174,13 +200,38 @@ const StackNavigator = () => {
         />
 
         <Stack.Screen
+          name="AiChat"
+          component={AiChatScreen}
+          options={{
+            headerTitle: "Chat With Bot", // Set your desired header title
+            headerStyle: {
+              backgroundColor: "#008E97", // Set your desired background color
+            },
+            headerTintColor: "#fff", // Set the text color of the header title
+          }}
+        />
+
+        <Stack.Screen
+          name="Messages"
+          component={MessageScreen}
+          options={({ navigation, route }) => ({
+            headerShown: false, // Hide the default header
+          })}
+        />
+        <Stack.Screen
           name="ViewShop"
           component={ViewShopScreen}
           options={{
             headerShown: false,
           }}
         />
-
+        <Stack.Screen
+          name="ProductDetail"
+          component={ProductDetailScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen
           name="CreateProduct"
           component={CreateProductScreen}
@@ -192,10 +243,24 @@ const StackNavigator = () => {
             headerTintColor: "#fff", // Set the text color of the header title
           }}
         />
-
         <Stack.Screen
           name="Expert"
           component={ExpertsScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="EditProfile"
+          component={EditProfileScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SocialAccount"
+          component={SocialScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="RegisterExpert"
+          component={RegisterExpertScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -209,5 +274,3 @@ const StackNavigator = () => {
 };
 
 export default StackNavigator;
-
-const styles = StyleSheet.create({});
