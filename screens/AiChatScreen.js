@@ -13,7 +13,7 @@ const AiChatScreen = () => {
   const [messages, setMessages] = useState([]);
 
   const openAISummarizer = async () => {
-    const apiKey = "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"; // Replace "YOUR_API_KEY" with your actual OpenAI API key
+    const apiKey = ""; // Replace "YOUR_API_KEY" with your actual OpenAI API key
 
     try {
       const response = await fetch("https://api.openai.com/v1/completions", {
