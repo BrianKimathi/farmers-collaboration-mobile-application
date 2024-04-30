@@ -26,7 +26,6 @@ import SocialScreen from "../screens/SocialScreen";
 import RegisterExpertScreen from "../screens/RegisterExpertScreen";
 import SocialContentScreen from "../screens/SocialContentScreen";
 import ViewUsersScreen from "../screens/ViewUsersScreen";
-import AiChatScreen from "../screens/AiChatScreen";
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -199,17 +198,7 @@ const StackNavigator = () => {
           }}
         />
 
-        <Stack.Screen
-          name="AiChat"
-          component={AiChatScreen}
-          options={{
-            headerTitle: "Chat With Bot", // Set your desired header title
-            headerStyle: {
-              backgroundColor: "#008E97", // Set your desired background color
-            },
-            headerTintColor: "#fff", // Set the text color of the header title
-          }}
-        />
+
 
         <Stack.Screen
           name="Messages"

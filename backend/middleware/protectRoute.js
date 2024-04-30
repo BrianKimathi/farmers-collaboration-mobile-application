@@ -10,7 +10,7 @@ const protectRoute = async (req, res, next) => {
         .json({ error: "Unauthorized - You are not logged in" });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, "cian2951.");
 
     if (!decoded) {
       return res.status(401).json({ error: "Unauthorized - Invalid token" });

@@ -68,7 +68,7 @@ const ExpertsScreen = () => {
           marginVertical: 10,
           width: "100%",
         }}>
-        <Pressable
+        {/* <Pressable
           onPress={goToChat}
           style={{
             backgroundColor: "#008E97",
@@ -85,7 +85,7 @@ const ExpertsScreen = () => {
             }}>
             Ask AI Assistant
           </Text>
-        </Pressable>
+        </Pressable> */}
       </View>
       <Text style={styles.title}>Experts:</Text>
       <ScrollView contentContainerStyle={styles.scrollContainer}>

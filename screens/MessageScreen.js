@@ -26,8 +26,6 @@ const MessageScreen = ({ route }) => {
   const navigation = useNavigation();
   const { headerTitle, chatUserId, profilePic } = route.params;
 
-  console.log("Chat user id: ", chatUserId);
-
   const isOnline = onlineUsers.includes(chatUserId);
 
   const generateRandomString = () => {

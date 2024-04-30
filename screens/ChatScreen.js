@@ -10,7 +10,7 @@ const ChatScreen = () => {
   const navigation = useNavigation();
 
   const connectWithUsers = async () => {
-    navigation.navigate("Chat");
+    navigation.navigate("ViewUsers");
   };
 
   useEffect(() => {
@@ -35,6 +35,7 @@ const ChatScreen = () => {
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
           <Text style={styles.noChatsText}>No chats yet</Text>
           <Pressable
+            onPress={connectWithUsers}
             style={{
               marginTop: 20,
               paddingVertical: 10,

@@ -98,7 +98,7 @@ export const rateExpert = async (req, res) => {
 export const getExpertById = async (req, res) => {
   try {
     const { id } = req.params; // Extract expert ID from request parameters
-
+    console.log("Expert id is: ", id);
     // Find the expert by ID and populate the 'user' field to get user details
     const expert = await Expert.findById(id).populate({
       path: "user",

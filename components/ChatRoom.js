@@ -17,7 +17,7 @@ const ChatRoom = ({ messages, receiverId, setMessages }) => {
   const sendMessage = async (message) => {
     try {
       const res = await axios.post(
-        `http://192.168.0.107:5000/api/messages/send/${receiverId}`,
+        `http://192.168.255.57:5000/api/messages/send/${receiverId}`,
         { message }
       );
       setMessages([...messages, res.data]);

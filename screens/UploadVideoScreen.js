@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import { Video } from "expo-av";
 import * as ImagePicker from "expo-image-picker";
 import { firebase } from "../config";
@@ -135,7 +142,11 @@ const UploadVideoScreen = () => {
       )}
       {videoSource && (
         <TouchableOpacity style={styles.uploadButton} onPress={handleUpload}>
-          <Text>Upload Video</Text>
+          {uploading ? (
+            <ActivityIndicator size="small" color="white" />
+          ) : (
+            <Text style={styles.uploadButtonText}>Upload</Text>
+          )}
         </TouchableOpacity>
       )}
       <TouchableOpacity style={styles.button} onPress={selectVideo}>

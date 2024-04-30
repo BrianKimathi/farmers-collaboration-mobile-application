@@ -18,7 +18,7 @@ const RegisterExpertScreen = () => {
   const createExpert = async () => {
     try {
       const response = await axios.post(
-        "http//:192.168.255.57:5000/api/auth/create-expert",
+        "http://192.168.255.57:5000/api/auth/create-expert",
         {
           description: description,
         }

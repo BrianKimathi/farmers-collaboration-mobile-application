@@ -18,19 +18,22 @@ const ExpertDetailScreen = ({ route }) => {
   const [expert, setExpert] = useState(null);
   const [rating, setRating] = useState(null);
 
+  console.log("Route params: ", route.params);
+
   useEffect(() => {
     const fetchExpertData = async () => {
       try {
         const response = await axios.get(
-          `http://192.168.255.57/api/users/experts/${expertId}`
+          `http://192.168.255.57:5000/api/users/expert/${expertId}`
         );
+        console.log("Expert is: ", response.data);
         setExpert(response.data);
       } catch (error) {
         console.log("Error fetching expert data:", error.message);
       }
     };
     fetchExpertData();
-  }, [expertId]);
+  }, []);
 
   const handleRateExpert = async (newRating) => {
     try {
